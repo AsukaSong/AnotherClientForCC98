@@ -1,10 +1,11 @@
 import * as React from 'react'
 import { Text, TextInput, View, Button} from 'react-native'
-import axios from 'axios'
 import * as storage from '../Utility/StorageUtility'
-import { RootState } from '../Store';
-import { logOn } from '../Actions/User';
-import { connect } from 'react-redux';
+import { RootState } from '../Store'
+import { logOn, updateUserInfo } from '../Actions/User'
+import { connect } from 'react-redux'
+import { cFetch } from '../Utility/FetchUtility'
+import { UserInfo } from '../TypeDefinitions/UserInfo'
 
 interface State {
     username: string
@@ -12,11 +13,12 @@ interface State {
 }
 
 interface Props {
-    logOn: () => void
+    logOn: (userInfo: UserInfo) => void
     isLogOn: boolean
+    userInfo: UserInfo
 }
 
-class LogOn extends React.Component<Props, State> {
+class LogOn extends React.PureComponent<Props, State> {
     state: State = {
         username: '',
         password: ''
@@ -33,21 +35,28 @@ class LogOn extends React.Component<Props, State> {
                 'scope': "cc98-api openid offline_access"
             }
 
-            console.log(Object.keys(requestBody).map(key => `${key}=${encodeURIComponent(requestBody[key])}`).join('&'))
-            let res = await axios({
-                url: 'https://openid.cc98.org/connect/token',
+            let res = await fetch('https://openid.cc98.org/connect/token', {
                 method: 'post',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
-                data: Object.keys(requestBody).map(key => `${key}=${encodeURIComponent(requestBody[key])}`).join('&')
+                body: Object.keys(requestBody).map(key => `${key}=${encodeURIComponent(requestBody[key])}`).join('&')
             })
 
-            storage.setStorage('accessToken', res.data.access_token, res.data.expires_in * 1000)
-            storage.setStorage('username', this.state.username)
-            storage.setStorage('password', this.state.password)
+            let data = await res.json()
 
-            this.props.logOn()
+            console.log(data)
+
+            await storage.setStorage('accessToken', data.token_type + ' ' + data.access_token, data.expires_in * 1000)
+            await storage.setStorage('username', this.state.username)
+            await storage.setStorage('password', this.state.password)
+
+            res = await cFetch('/me')
+            data = await res.json() as UserInfo
+
+            console.log(data)
+
+            this.props.logOn(data)
         } catch(e) {
             console.log(e)
         }
@@ -55,6 +64,7 @@ class LogOn extends React.Component<Props, State> {
 
     render() {
         console.log(this.props.isLogOn)
+        console.log(this.props.userInfo)
 
         return (
             <View>
@@ -75,12 +85,14 @@ class LogOn extends React.Component<Props, State> {
 }
 
 const mapState = (state: RootState) => ({
-    isLogOn: state.user.isLogOn
+    isLogOn: state.user.isLogOn,
+    userInfo: state.user.userInfo
 })
 
 const mapDispatch = (dispatch) => ({
-    logOn: () => {
+    logOn: (userInfo: UserInfo) => {
         dispatch(logOn())
+        dispatch(updateUserInfo(userInfo))
     }
 })
 
