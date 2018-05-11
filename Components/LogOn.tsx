@@ -6,6 +6,7 @@ import { logOn, updateUserInfo } from '../Actions/User'
 import { connect } from 'react-redux'
 import { cFetch } from '../Utility/FetchUtility'
 import { UserInfo } from '../TypeDefinitions/UserInfo'
+import { withNavigation } from 'react-navigation'
 
 interface State {
     username: string
@@ -16,12 +17,21 @@ interface Props {
     logOn: (userInfo: UserInfo) => void
     isLogOn: boolean
     userInfo: UserInfo
+    // for react-navigation
+    navigation: any
 }
 
 class LogOn extends React.PureComponent<Props, State> {
     state: State = {
         username: '',
         password: ''
+    }
+
+    static navigationOptions = {
+        title: '登陆',
+        headerStyle: { 
+            alignContent: 'center'
+        }
     }
 
     logOn = async () => {
@@ -57,6 +67,7 @@ class LogOn extends React.PureComponent<Props, State> {
             console.log(data)
 
             this.props.logOn(data)
+            this.props.navigation.navigate('Main')
         } catch(e) {
             console.log(e)
         }
@@ -96,4 +107,4 @@ const mapDispatch = (dispatch) => ({
     }
 })
 
-export default connect(mapState, mapDispatch)(LogOn)
+export default connect(mapState, mapDispatch)(withNavigation(LogOn))
