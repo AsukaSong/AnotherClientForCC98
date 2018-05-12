@@ -24,9 +24,11 @@ export async function setStorage(key: string, data: any, expires: number = undef
  * @param key 索引
  */
 export async function getStorage(key: string): Promise<any> {
-    let expires = await AsyncStorage.getItem(`${key}_expires`)
+    console.log(key)
+    let expires = await getItem(`${key}_expires`)
     if(expires && (parseInt(expires) < Date.now())) return undefined
-    let data = await AsyncStorage.getItem(key)
+    let data = await getItem(key)
+    if(!data) return undefined
     if (data.indexOf('obj-') === 0) {
         data = data.slice(4);
         return JSON.parse(data);
@@ -38,4 +40,20 @@ export async function getStorage(key: string): Promise<any> {
 export async function removeStorage(key: string): Promise<void> {
     await AsyncStorage.removeItem(key)
     await AsyncStorage.removeItem(`${key}_expires`)
+}
+
+/**
+ * from https://github.com/facebook/react-native/issues/14101#issuecomment-345563563
+ * @param key 
+ */
+async function getItem(TOKEN_KEY: string) {
+    const resolvedPromisesArray = [
+        AsyncStorage.getItem(TOKEN_KEY),
+        AsyncStorage.getItem(TOKEN_KEY),
+        AsyncStorage.getItem(TOKEN_KEY),
+        AsyncStorage.getItem(TOKEN_KEY),
+        AsyncStorage.getItem(TOKEN_KEY)
+    ]
+    const token = await Promise.race(resolvedPromisesArray)
+    return token
 }

@@ -11,3 +11,5 @@ export const updateUserInfo = createAction(ActionTypes.USER_INFO_UPDATE, (userIn
         userInfo
     }
 }))
+
+export const init = createAction(ActionTypes.INIT)

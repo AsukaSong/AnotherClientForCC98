@@ -64,8 +64,6 @@ class LogOn extends React.PureComponent<Props, State> {
 
             let data = await res.json()
 
-            console.log(data)
-
             await storage.setStorage('accessToken', data.token_type + ' ' + data.access_token, data.expires_in * 1000)
             await storage.setStorage('username', this.state.username)
             await storage.setStorage('password', this.state.password)
@@ -73,8 +71,7 @@ class LogOn extends React.PureComponent<Props, State> {
             res = await cFetch('/me')
             data = await res.json() as UserInfo
 
-            console.log(data)
-
+            storage.setStorage('userInfo', data)
             this.props.logOn(data)
             this.props.navigation.navigate('Main')
         } catch(e) {

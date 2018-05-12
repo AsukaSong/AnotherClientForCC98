@@ -7,6 +7,7 @@ import * as ActionTypes from '../ActionTypes'
 export class UserStore {
     userInfo = {} as UserInfo
     isLogOn = false
+    isLoading = true
 }
 
 export default (state = new UserStore, action: RootAction): UserStore => {
@@ -17,6 +18,8 @@ export default (state = new UserStore, action: RootAction): UserStore => {
             return { ...state, isLogOn: false }
         case ActionTypes.USER_INFO_UPDATE: 
             return { ...state, userInfo: action.payload.userInfo }
+        case ActionTypes.INIT: 
+            return { ...state, isLoading: false}
         default: 
             return state
     }
