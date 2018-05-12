@@ -7,6 +7,8 @@ import { PostItem } from './PostItem'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { anonymousUserInfo } from '../Config/anonymousUserInfo'
 import { notFoundUserInfo } from '../Config/notFoundUserInfo'
+import store from '../Store'
+import { changeTitle } from '../Actions/User'
 
 interface Props {
     navigation: any
@@ -17,6 +19,7 @@ interface State {
     posts: PostInfo[]
     isLoading: boolean
     isLoadFinished: boolean
+    historyTitle: string
 }
 
 export class Topic extends React.PureComponent<Props, State> {
@@ -24,11 +27,8 @@ export class Topic extends React.PureComponent<Props, State> {
         userInfos: [],
         posts: [],
         isLoading: true,
-        isLoadFinished: false
-    }
-
-    static navigationOptions = {
-        title: '帖子'
+        isLoadFinished: false,
+        historyTitle: ''
     }
 
     getPosts = async () => {
@@ -53,8 +53,14 @@ export class Topic extends React.PureComponent<Props, State> {
         }))
     }
 
-    async componentDidMount() {
+    componentDidMount() {
         this.getPosts()
+        this.setState({ historyTitle: store.getState().user.title })
+        store.dispatch(changeTitle('帖子'))
+    }
+
+    componentWillUnmount() {
+        store.dispatch(changeTitle(this.state.historyTitle))
     }
 
     render() {

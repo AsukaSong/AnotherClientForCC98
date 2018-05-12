@@ -39,4 +39,4 @@ class Item extends React.Component<Props> {
     }
 }
 
-export const TopicItem = Item
+export const TopicItem = withNavigation(Item)

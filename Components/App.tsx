@@ -12,6 +12,55 @@ import { MainPage } from './MainPage'
 import * as storage from '../Utility/StorageUtility'
 import { init } from '../AsyncActions/init'
 import { Topic } from './TopicList'
+import { BoardList } from './BoardList'
+import { Title } from './Title'
+
+const Navigator = createBottomTabNavigator({
+    '主页': MainPage,
+    '版面': BoardList,
+    '消息': () => <Text>消息</Text>,
+    '我的': () => <Text>我的</Text>,
+},
+{
+    navigationOptions: ({ navigation }) => ({
+        tabBarIcon: ({ focused }) => {
+            let iconName = getIconNameByRouteName(navigation.state.routeName)
+            return <Icon name={iconName} style={{ color: focused ? '#00a4db' : '', marginTop: 5 }} size={25} />
+        },
+        tabBarOptions: {
+            activeTintColor: '#00a4db',
+            labelStyle: {
+                marginBottom: 5,
+            }
+        }
+    })
+})
+
+const RootNav = createStackNavigator({
+    LogOn: {
+        screen: LogOn
+    },
+    Main: {
+        screen: Navigator
+    },
+    Topic: {
+        screen: Topic
+    }
+}, {
+    initialRouteName: 'Main',
+    navigationOptions: {
+        headerTitle: Title
+    }
+})
+
+function getIconNameByRouteName(name: string): string {
+    switch(name) {
+        case '主页': return 'home' 
+        case '版面': return 'list'
+        case '消息': return 'comment-o'
+        case '我的': return 'user'
+    }
+}
 
 interface Props {
     isLogOn: boolean
@@ -19,77 +68,12 @@ interface Props {
     init: () => void
 }
 
-interface State {
-    title: string
-}
-
-class App extends React.PureComponent<Props, State> {
-    state: State = {
-        title: '热门话题'
-    }
-
-    async componentDidMount() {
+class App extends React.PureComponent<Props> {
+    componentDidMount() {
         this.props.init()
     }
 
-    getIconNameByRouteName(name: string): string {
-        switch(name) {
-            case 'main': return 'home' 
-            case 'list': return 'list'
-            case 'message': return 'comment-o'
-            case 'usercenter': return 'user'
-        }
-    }
-
-    getTitleByRouteName(name: string) {
-        switch(name) {
-            case 'main': return '主页' 
-            case 'list': return '版面'
-            case 'message': return '消息'
-            case 'usercenter': return '我的'
-        }
-    }
-
     render() {
-        const Navigator = createBottomTabNavigator({
-            'main': MainPage,
-            'list': () => <Text>版面</Text>,
-            'message': () => <Text>消息</Text>,
-            'usercenter': () => <Text>我的</Text>,
-        },
-        {
-            navigationOptions: ({ navigation }) => ({
-                tabBarIcon: ({ focused }) => {
-                    let iconName = this.getIconNameByRouteName(navigation.state.routeName)
-                    return <Icon name={iconName} style={{ color: focused ? '#00a4db' : '', marginTop: 5 }} size={25} />
-                },
-                tabBarOptions: {
-                    activeTintColor: '#00a4db',
-                    labelStyle: {
-                        marginBottom: 5,
-                    }
-                }
-            })
-        })
-
-        Navigator.navigationOptions = {
-            title: this.state.title
-        }
-        
-        const RootNav = createStackNavigator({
-            LogOn: {
-                screen: LogOn
-            },
-            Main: {
-                screen: Navigator
-            },
-            Topic: {
-                screen: Topic
-            }
-        }, {
-            initialRouteName: this.props.isLogOn ? 'Main' : 'LogOn',
-        })
-
         if(this.props.isLoading) {
             return null
         } else {
@@ -100,7 +84,7 @@ class App extends React.PureComponent<Props, State> {
 
 const mapState = (state: RootState) => ({
     isLogOn: state.user.isLogOn,
-    isLoading: state.user.isLoading
+    isLoading: state.user.isLoading,
 })
 
 const mapDispatch = (dispatch) => ({

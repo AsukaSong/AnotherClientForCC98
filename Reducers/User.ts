@@ -8,6 +8,7 @@ export class UserStore {
     userInfo = {} as UserInfo
     isLogOn = false
     isLoading = true
+    title = 'CC98'
 }
 
 export default (state = new UserStore, action: RootAction): UserStore => {
@@ -20,6 +21,8 @@ export default (state = new UserStore, action: RootAction): UserStore => {
             return { ...state, userInfo: action.payload.userInfo }
         case ActionTypes.INIT: 
             return { ...state, isLoading: false}
+        case ActionTypes.CHANGE_TITLE: 
+            return { ...state, title: action.payload.title }
         default: 
             return state
     }

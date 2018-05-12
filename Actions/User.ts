@@ -13,3 +13,10 @@ export const updateUserInfo = createAction(ActionTypes.USER_INFO_UPDATE, (userIn
 }))
 
 export const init = createAction(ActionTypes.INIT)
+
+export const changeTitle = createAction(ActionTypes.CHANGE_TITLE, (title: string) => ({
+    type: ActionTypes.CHANGE_TITLE,
+    payload: {
+        title
+    }
+}))
