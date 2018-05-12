@@ -1,5 +1,6 @@
 import * as storage from './StorageUtility'
 import urljoin from 'url-join'
+import { UserInfo } from '../TypeDefinitions/UserInfo'
 
 export async function cFetch(url: string, init: RequestInit = { headers: {}}) {
     const baseURL = 'https://api-v2.cc98.org'
@@ -36,4 +37,36 @@ export async function cFetch(url: string, init: RequestInit = { headers: {}}) {
             'Authorization': token
         }
     }})
+}
+
+export async function getUsersInfo(keys: number[]): Promise<UserInfo[]> {
+    try {
+        // 缓存未命中的项，其值为对应的key，以便进一步通过api查询
+        let infos: (UserInfo | number)[];
+        infos = await Promise.all(keys.map(async item => (await storage.getStorage(`user_${item}`) || item)))
+
+        // 批量查询未命中的项
+        let querys = infos.filter(item => (typeof item === 'number'))
+        let queryInfo: UserInfo[] = []
+        if(querys.length !== 0){
+            const url = `/user?id=${querys.join('&id=')}` 
+            let res = await cFetch(url)
+            queryInfo = await res.json();
+        }
+
+        queryInfo.map(item => storage.setStorage(`user_${item.id}`, item, 3600 * 1000))
+
+        let userInfos: UserInfo[] = infos.map(item => {
+            if(typeof item === 'number') {
+                return queryInfo.filter(info => info.id === item)[0]
+            } else {
+                return item
+            }
+        })
+
+        return userInfos;
+
+    } catch(e) {
+        console.log(e)
+    }
 }

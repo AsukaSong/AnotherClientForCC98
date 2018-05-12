@@ -28,10 +28,7 @@ class LogOn extends React.PureComponent<Props, State> {
     }
 
     static navigationOptions = {
-        title: '登陆',
-        headerStyle: { 
-            alignContent: 'center'
-        }
+        title: '登陆'
     }
 
     async componentDidMount() {
@@ -73,7 +70,7 @@ class LogOn extends React.PureComponent<Props, State> {
 
             storage.setStorage('userInfo', data)
             this.props.logOn(data)
-            this.props.navigation.navigate('Main')
+            this.props.navigation.replace('Main')
         } catch(e) {
             console.log(e)
         }
