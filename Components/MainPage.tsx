@@ -24,7 +24,7 @@ interface State {
     isLoading: boolean
 }
 
-export class MainPage extends React.Component<Props, State> {
+export class MainPage extends React.PureComponent<Props, State> {
     state: State = {
         infos: [],
         isLoading: true,

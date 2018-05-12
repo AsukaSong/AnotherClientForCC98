@@ -2,11 +2,12 @@ import * as React from 'react'
 import { Text, TextInput, View, Button} from 'react-native'
 import * as storage from '../Utility/StorageUtility'
 import { RootState } from '../Store'
-import { logOn, updateUserInfo } from '../Actions/User'
+import { logOn, updateUserInfo, changeTitle } from '../Actions/User'
 import { connect } from 'react-redux'
 import { cFetch } from '../Utility/FetchUtility'
 import { UserInfo } from '../TypeDefinitions/UserInfo'
 import { withNavigation } from 'react-navigation'
+import store from '../Store'
 
 interface State {
     username: string
@@ -27,11 +28,14 @@ class LogOn extends React.PureComponent<Props, State> {
         password: ''
     }
 
-    static navigationOptions = {
-        title: '登陆'
+    componentWillReceiveProps(newProps) {
+        if(newProps.navigation.isFocused()) {
+            store.dispatch(changeTitle('用户登陆'))
+        }
     }
 
     async componentDidMount() {
+        store.dispatch(changeTitle('用户登陆'))
         let username = await storage.getStorage('username')
         let password = await storage.getStorage('password')
         this.setState({

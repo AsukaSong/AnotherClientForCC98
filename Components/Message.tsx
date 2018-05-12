@@ -1,16 +1,16 @@
 import * as React from 'react'
-import { Text } from 'react-native'
+import { } from 'react-native'
 import store from '../Store'
 import { changeTitle } from '../Actions/User'
 
-export class BoardList extends React.PureComponent {
+export class Message extends React.PureComponent {
     componentDidMount() {
-        store.dispatch(changeTitle('版面列表'))
+        store.dispatch(changeTitle('消息中心'))
     }
 
     componentWillReceiveProps(newProps) {
         if(newProps.navigation.isFocused()) {
-            store.dispatch(changeTitle('版面列表'))
+            store.dispatch(changeTitle('消息中心'))
         }
     }
 

@@ -14,12 +14,14 @@ import { init } from '../AsyncActions/init'
 import { Topic } from './TopicList'
 import { BoardList } from './BoardList'
 import { Title } from './Title'
+import { User } from './User'
+import { Message } from './Message'
 
 const Navigator = createBottomTabNavigator({
     '主页': MainPage,
     '版面': BoardList,
-    '消息': () => <Text>消息</Text>,
-    '我的': () => <Text>我的</Text>,
+    '消息': Message,
+    '我的': User,
 },
 {
     navigationOptions: ({ navigation }) => ({
@@ -34,23 +36,6 @@ const Navigator = createBottomTabNavigator({
             }
         }
     })
-})
-
-const RootNav = createStackNavigator({
-    LogOn: {
-        screen: LogOn
-    },
-    Main: {
-        screen: Navigator
-    },
-    Topic: {
-        screen: Topic
-    }
-}, {
-    initialRouteName: 'Main',
-    navigationOptions: {
-        headerTitle: Title
-    }
 })
 
 function getIconNameByRouteName(name: string): string {
@@ -77,6 +62,23 @@ class App extends React.PureComponent<Props> {
         if(this.props.isLoading) {
             return null
         } else {
+            const RootNav = createStackNavigator({
+                LogOn: {
+                    screen: LogOn
+                },
+                Main: {
+                    screen: Navigator
+                },
+                Topic: {
+                    screen: Topic
+                }
+            }, {
+                initialRouteName: this.props.isLogOn ? 'Main' : 'LogOn',
+                navigationOptions: {
+                    headerTitle: Title
+                }
+            })
+
             return <RootNav />
         }
     }

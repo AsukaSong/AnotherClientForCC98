@@ -85,6 +85,7 @@ export class Topic extends React.PureComponent<Props, State> {
                     </View>}
                 onEndReached={this.getPosts}
                 onEndReachedThreshold={0.1}
+                ListFooterComponent={this.state.isLoadFinished ? () => <View style={{ alignItems: 'center', margin: 20 }}><Text style={{ color: '#aaaaaa' }}>没有更多了</Text></View> : null}
             ></FlatList>
         }
     }

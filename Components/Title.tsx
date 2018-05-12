@@ -7,11 +7,11 @@ interface Props {
     title: string
 }
 
-class TitleItem extends React.Component<Props> {
+class TitleItem extends React.PureComponent<Props> {
     render() {
         return (
             <View>
-                <Text>{this.props.title}</Text>
+                <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{this.props.title}</Text>
             </View>
         )
     }
