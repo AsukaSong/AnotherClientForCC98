@@ -34,6 +34,15 @@ class LogOn extends React.PureComponent<Props, State> {
         }
     }
 
+    async componentDidMount() {
+        let username = await storage.getStorage('username')
+        let password = await storage.getStorage('password')
+        this.setState({
+            username,
+            password
+        })
+    }
+
     logOn = async () => {
         try {
             let requestBody = {
@@ -74,9 +83,6 @@ class LogOn extends React.PureComponent<Props, State> {
     }
 
     render() {
-        console.log(this.props.isLogOn)
-        console.log(this.props.userInfo)
-
         return (
             <View>
                 <View>
