@@ -38,7 +38,6 @@ export class Topic extends React.PureComponent<Props, State> {
         let res = await cFetch(`/Topic/${id}/post?from=${this.state.posts.length}&size=20`)
         let newPosts = await res.json() as PostInfo[]
         let userInfos: UserInfo[]
-        console.log(isAnonymous)
         if(!isAnonymous) {
             let userIds = newPosts.map(item => item.userId)
             userInfos = await getUsersInfo(userIds)

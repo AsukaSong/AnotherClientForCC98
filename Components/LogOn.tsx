@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Text, TextInput, View, Button} from 'react-native'
+import { Text, TextInput, View, Button, Image, TouchableHighlight } from 'react-native'
 import * as storage from '../Utility/StorageUtility'
 import { RootState } from '../Store'
 import { logOn, updateUserInfo, changeTitle } from '../Actions/User'
@@ -25,7 +25,7 @@ interface Props {
 class LogOn extends React.PureComponent<Props, State> {
     state: State = {
         username: '',
-        password: ''
+        password: '',
     }
 
     componentWillReceiveProps(newProps) {
@@ -76,23 +76,42 @@ class LogOn extends React.PureComponent<Props, State> {
             this.props.logOn(data)
             this.props.navigation.replace('Main')
         } catch(e) {
-            console.log(e)
+            console.error(e)
         }
     }
 
     render() {
+        let style = {
+            width: 300, 
+            height: 30, 
+            marginTop: 30, 
+            borderBottomWidth: 1, 
+            borderBottomColor: '#aaaaaa'
+        } as any
+
+        const isDisabled = !(this.state.password && this.state.username) || this.state.password.length < 6
+
         return (
-            <View>
-                <View>
-                    <Text>用户名</Text>
-                    <TextInput value={this.state.username} onChangeText={(username) => this.setState({ username })} />
+            <View style={{ alignItems: 'center', paddingTop: 30 }} >
+                <Image source={{ uri: 'https://www.cc98.org/static/98icon.ico' }} style={{ width: 150, height: 150, borderRadius: 75 }} />
+                <View style={{ ...style  }} >
+                    <TextInput 
+                        placeholder="请输入用户名" 
+                        style={{ fontSize: 20 }} 
+                        value={this.state.username} 
+                        onChangeText={(username) => this.setState({ username })} 
+                    />
                 </View>
-                <View>
-                    <Text>密码</Text>
-                    <TextInput value={this.state.password} onChangeText={(password) => this.setState({ password })} secureTextEntry={true} />
+                <View style={{ ...style  }} >
+                    <TextInput placeholder="请输入密码" style={{ fontSize: 20 }} value={this.state.password} onChangeText={(password) => this.setState({ password })} secureTextEntry={true} />
                 </View>
-                <View>
-                    <Button title="登陆" onPress={this.logOn} />
+                <View style={{ paddingTop: 30, flexDirection: 'column', borderBottomWidth: 0 }}>
+                    <TouchableHighlight 
+                        underlayColor="rgb(71, 182, 230)"
+                        onPress={this.logOn} 
+                        style={{ backgroundColor: isDisabled ? "#cccccc" : 'rgb(91, 202, 250)', width: 300, height: 50, borderRadius: 10, justifyContent: 'space-around', alignItems: 'center' }}
+                        disabled={isDisabled}
+                    ><Text style={{ fontSize: 20, color: 'white' }} >登  陆</Text></TouchableHighlight>
                 </View>
             </View>
         )

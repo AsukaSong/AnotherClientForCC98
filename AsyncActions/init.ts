@@ -5,10 +5,8 @@ import { RootState } from '../Store'
 import * as storage from '../Utility/StorageUtility'
 
 export const init: ActionCreator<ThunkAction<Promise<Action>, RootState, void>> = () => async (dispatch, getState) => {
-    console.log('initing')
     try {
         let userInfo = await storage.getStorage('userInfo')
-        console.log(userInfo)
         if(userInfo) {
             dispatch(Actions.logOn())
             dispatch(Actions.updateUserInfo(userInfo))

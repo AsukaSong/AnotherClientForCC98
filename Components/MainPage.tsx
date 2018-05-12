@@ -49,7 +49,6 @@ export class MainPage extends React.PureComponent<Props, State> {
     }
 
     componentWillReceiveProps(newProps) {
-        console.log('update')
         if(newProps.navigation.isFocused()) {
             store.dispatch(changeTitle('热门话题'))
         }

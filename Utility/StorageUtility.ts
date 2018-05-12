@@ -24,7 +24,6 @@ export async function setStorage(key: string, data: any, expires: number = undef
  * @param key 索引
  */
 export async function getStorage(key: string): Promise<any> {
-    console.log(key)
     let expires = await AsyncStorage.getItem(`${key}_expires`)
     if(expires && (parseInt(expires) < Date.now())) return undefined
     let data = await AsyncStorage.getItem(key)

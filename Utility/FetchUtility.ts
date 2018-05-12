@@ -5,7 +5,6 @@ import { UserInfo } from '../TypeDefinitions/UserInfo'
 export async function cFetch(url: string, init: RequestInit = { headers: {}}) {
     const baseURL = 'https://api-v2.cc98.org'
     let token = await storage.getStorage('accessToken') as string
-    console.log(url)
 
     if(!token) {
         let requestBody = {
@@ -67,6 +66,6 @@ export async function getUsersInfo(keys: number[]): Promise<UserInfo[]> {
         return userInfos;
 
     } catch(e) {
-        console.log(e)
+        console.error(e)
     }
 }

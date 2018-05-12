@@ -91,7 +91,6 @@ const mapState = (state: RootState) => ({
 
 const mapDispatch = (dispatch) => ({
     init: () => {
-        console.log('app loading')
         dispatch(init())
     }
 })
