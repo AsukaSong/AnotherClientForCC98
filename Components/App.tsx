@@ -11,11 +11,12 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import { MainPage } from './MainPage'
 import * as storage from '../Utility/StorageUtility'
 import { init } from '../AsyncActions/init'
-import { Topic } from './TopicList'
+import { PostList } from './PostList'
 import { BoardList } from './BoardList'
 import { Title } from './Title'
 import { User } from './User'
 import { Message } from './Message'
+import { TopicList } from './TopicList'
 
 const Navigator = createBottomTabNavigator({
     '主页': MainPage,
@@ -47,6 +48,26 @@ function getIconNameByRouteName(name: string): string {
     }
 }
 
+const RootNav = createStackNavigator({
+    LogOn: {
+        screen: LogOn
+    },
+    Main: {
+        screen: Navigator
+    },
+    Topic: {
+        screen: PostList
+    },
+    Board: {
+        screen: TopicList
+    }
+}, {
+    initialRouteName: 'Main',
+    navigationOptions: {
+        headerTitle: Title
+    }
+})
+
 interface Props {
     isLogOn: boolean
     isLoading: boolean
@@ -58,27 +79,12 @@ class App extends React.PureComponent<Props> {
         this.props.init()
     }
 
+
     render() {
+        console.log('app rendered')
         if(this.props.isLoading) {
             return null
         } else {
-            const RootNav = createStackNavigator({
-                LogOn: {
-                    screen: LogOn
-                },
-                Main: {
-                    screen: Navigator
-                },
-                Topic: {
-                    screen: Topic
-                }
-            }, {
-                initialRouteName: this.props.isLogOn ? 'Main' : 'LogOn',
-                navigationOptions: {
-                    headerTitle: Title
-                }
-            })
-
             return <RootNav />
         }
     }

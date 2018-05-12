@@ -20,12 +20,12 @@ class Item extends React.PureComponent<Props> {
                 underlayColor="#cccccc"
                 style={{ padding: 0 }}
                 onPress={() => this.props.navigation.navigate('Topic', { topicId: this.props.info.id, title: this.props.info.title, isAnonymous: this.props.info.isAnonymous })}
-            ><View style={{ padding: 15 }}>
+            ><View style={{ padding: 15, borderBottomWidth: 1, borderBottomColor: 'rgb(200,200,200)' }}>
                 <Text style={{ color: '#00a4db', marginBottom: 20, fontSize: 20 }}>{this.props.info.title}</Text>
                 <View style={{ flex: 1, flexDirection: 'row'}}>
                     <View style={{ flex: 1.5, flexDirection: 'row', alignItems: 'center'}}>
                         <Icon name="user" style={{ marginRight: 5 }} />
-                        <Text>{this.props.info.userName}</Text>
+                        <Text>{this.props.info.userName || '匿名'}</Text>
                     </View>
                     <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center'}}>
                         <Icon name="comment-o" style={{ marginRight: 5 }} />
@@ -33,7 +33,7 @@ class Item extends React.PureComponent<Props> {
                     </View>
                     <View style={{ flex: 2, flexDirection: 'row', alignItems: 'center'}}>
                         <Icon name="clock-o" style={{ marginRight: 5 }} />
-                        <Text>{this.props.info.lastPostTime.replace('T', ' ')}</Text>
+                        <Text>{this.props.info.lastPostTime.replace('T', ' ').slice(0, 19)}</Text>
                     </View>
                 </View>
             </View></TouchableHighlight>

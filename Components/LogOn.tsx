@@ -12,6 +12,7 @@ import store from '../Store'
 interface State {
     username: string
     password: string
+    isLoading: boolean
 }
 
 interface Props {
@@ -26,6 +27,7 @@ class LogOn extends React.PureComponent<Props, State> {
     state: State = {
         username: '',
         password: '',
+        isLoading: false,
     }
 
     componentWillReceiveProps(newProps) {
@@ -46,6 +48,7 @@ class LogOn extends React.PureComponent<Props, State> {
 
     logOn = async () => {
         try {
+            this.setState({ isLoading: true })
             let requestBody = {
                 'client_id': '42cb8d05-eb88-4e97-cfaa-08d5a073b73c',
                 'client_secret': '21ddeeb8-1f50-4bf9-856e-df4a2b6912c9',
@@ -77,6 +80,8 @@ class LogOn extends React.PureComponent<Props, State> {
             this.props.navigation.replace('Main')
         } catch(e) {
             console.error(e)
+        } finally {
+            this.setState({ isLoading: false })
         }
     }
 
@@ -89,11 +94,11 @@ class LogOn extends React.PureComponent<Props, State> {
             borderBottomColor: '#aaaaaa'
         } as any
 
-        const isDisabled = !(this.state.password && this.state.username) || this.state.password.length < 6
+        const isDisabled = !(this.state.password && this.state.username) || this.state.password.length < 6 || this.state.isLoading
 
         return (
             <View style={{ alignItems: 'center', paddingTop: 30 }} >
-                <Image source={{ uri: 'https://www.cc98.org/static/98icon.ico' }} style={{ width: 150, height: 150, borderRadius: 75 }} />
+                <Image source={{ uri: 'https://www.cc98.org/static/98icon.ico' }} style={{ width: 150, height: 150 }} />
                 <View style={{ ...style  }} >
                     <TextInput 
                         placeholder="请输入用户名" 

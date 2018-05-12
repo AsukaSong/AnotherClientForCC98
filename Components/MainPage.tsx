@@ -4,7 +4,8 @@ import {
     ScrollView,
     View,
     TouchableHighlight,
-    ActivityIndicator
+    ActivityIndicator,
+    RefreshControl
 } from 'react-native'
 import { cFetch } from '../Utility/FetchUtility'
 import { HotTopicInfo } from '../TypeDefinitions/HotTopicInfo'
@@ -30,8 +31,8 @@ export class MainPage extends React.PureComponent<Props, State> {
         isLoading: true,
     }
 
-    async componentDidMount() {
-        store.dispatch(changeTitle('热门话题'))
+    getHotTopic = async () => {
+        this.setState({ isLoading: true })
         let res = await cFetch('/config/index')
         let data = (await res.json()).hotTopic as HotTopicInfo[]
         let infos = data.map((item) => ({
@@ -42,10 +43,16 @@ export class MainPage extends React.PureComponent<Props, State> {
             id: item.id,
             isAnonymous: item.boardId === 182
         }) as TopicInfo)
+        
         this.setState({
             isLoading: false,
             infos
         })
+    }
+
+    componentDidMount() {
+        store.dispatch(changeTitle('热门话题'))
+        this.getHotTopic()
     }
 
     componentWillReceiveProps(newProps) {
@@ -55,16 +62,18 @@ export class MainPage extends React.PureComponent<Props, State> {
     }
 
     render() {
-        if(this.state.isLoading) {
+        if(this.state.infos.length === 0) {
             return <ActivityIndicator style={{ marginTop: 30 }} size='large' />
         } else {
             let items = this.state.infos.map(item => <TopicItem key={item.id} info={item} />)
-            //添加分隔线
-            for (let i = 1; i < items.length; i += 2) {
-                items.splice(i, 0, <View style={{ borderBottomWidth: 1, borderBottomColor: 'rgb(200,200,200)' }} key={i}/>);
-            }
             return (
-                <ScrollView style={{ paddingLeft: 10, paddingRight: 10}}>
+                <ScrollView 
+                    style={{ paddingLeft: 10, paddingRight: 10}}
+                    refreshControl={<RefreshControl 
+                        refreshing={this.state.isLoading}
+                        onRefresh={this.getHotTopic}
+                    />}
+                >
                     {items}
                 </ScrollView>
             )
