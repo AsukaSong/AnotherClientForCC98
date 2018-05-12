@@ -16,7 +16,9 @@ interface Props {
 class Item extends React.Component<Props> {
     render() {
         return (
-            <TouchableHighlight onPress={() => this.props.navigation.navigate('Topic', { topicId: this.props.info.id })}><View style={{ padding: 15 }}>
+            <TouchableHighlight 
+                onPress={() => this.props.navigation.navigate('Topic', { topicId: this.props.info.id, title: this.props.info.title, isAnonymous: this.props.info.isAnonymous })}
+            ><View style={{ padding: 15 }}>
                 <Text style={{ color: '#00a4db', marginBottom: 20, fontSize: 20 }}>{this.props.info.title}</Text>
                 <View style={{ flex: 1, flexDirection: 'row'}}>
                     <View style={{ flex: 1.5, flexDirection: 'row', alignItems: 'center'}}>

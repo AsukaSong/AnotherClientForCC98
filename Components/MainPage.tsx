@@ -38,7 +38,8 @@ export class MainPage extends React.Component<Props, State> {
             userName: item.authorName || '匿名',
             replyCount: item.replyCount,
             lastPostTime: item.createTime,
-            id: item.id
+            id: item.id,
+            isAnonymous: item.boardId === 182
         }) as TopicInfo)
         this.setState({
             isLoading: false,

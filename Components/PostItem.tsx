@@ -10,8 +10,7 @@ interface Props {
 }
 
 export class PostItem extends React.PureComponent<Props> {
-    render() {
-        console.log(this.props.userInfo.portraitUrl)
+    render() { 
         return (
             <View style={{ padding: 10 }}>
                 <View style={{ flexDirection: 'row', borderBottomColor: '#dddddd', borderBottomWidth: 1, padding: 10 }}>
