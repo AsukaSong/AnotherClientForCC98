@@ -3,12 +3,13 @@ import LogOn from './LogOn'
 import { Text, View, NetInfo } from 'react-native'
 import { 
     createBottomTabNavigator,
-    createStackNavigator
+    createStackNavigator,
+    createTabNavigator
  } from 'react-navigation'
 import { Provider, connect } from 'react-redux'
 import store, { RootState } from '../Store'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import { MainPage } from './MainPage'
+import { HotTopic } from './MainPage/HotTopic'
 import * as storage from '../Utility/StorageUtility'
 import { init } from '../AsyncActions/init'
 import { PostList } from './PostList'
@@ -19,25 +20,52 @@ import { Message } from './Message'
 import { TopicList } from './TopicList'
 import { netWorkType } from '../Config/netWorkType'
 import { refreshNewWorkType } from '../AsyncActions/refreshNetWorkType'
+import { PastTopic } from './MainPage/PastTopic'
+import { FocusBoardTopicList } from './MainPage/FocusBoardTopicList'
+import { FocusUserTopicList } from './MainPage/FocusUserTopicList'
 
-const Navigator = createBottomTabNavigator({
-    '主页': MainPage,
+const HomeNav = createTabNavigator({
+    '热门话题': HotTopic,
+    '往年今日': PastTopic,
+    '关注版面': FocusBoardTopicList,
+    '关注用户': FocusUserTopicList,
+}, {
+    tabBarPosition: 'top',
+    swipeEnabled: true,
+    animationEnabled: true,
+    tabBarOptions: {
+        style: {
+            height: 40,
+            borderBottomWidth: 1,
+            borderBottomColor: '#ffffff',
+        }
+    },
+    navigationOptions:({ navigation }) => ({
+        tabBarLabel: ({ focused }) => {
+            const title = navigation.state.routeName
+            return () => <Text style = {{ 
+                color: focused ? '#00a4db' : '#000000', 
+                fontSize: 17,
+                marginBottom: 7
+            }}>{title}</Text>
+        }
+    })
+})
+
+const AppNavigator = createBottomTabNavigator({
+    '主页': HomeNav,
     '版面': BoardList,
     '消息': Message,
     '我的': User,
-},
-{
+}, {
     navigationOptions: ({ navigation }) => ({
         tabBarIcon: ({ focused }) => {
             let iconName = getIconNameByRouteName(navigation.state.routeName)
-            return <Icon name={iconName} style={{ color: focused ? '#00a4db' : '', marginTop: 5 }} size={25} />
+            return <Icon name={iconName} style={{ color: focused ? '#00a4db' : '' }} size={25} />
         },
         tabBarOptions: {
-            activeTintColor: '#00a4db',
-            labelStyle: {
-                marginBottom: 5,
-            }
-        }
+            showLabel: false
+        },
     })
 })
 
@@ -55,7 +83,7 @@ const RootNav = createStackNavigator({
         screen: LogOn
     },
     Main: {
-        screen: Navigator
+        screen: AppNavigator
     },
     Topic: {
         screen: PostList
@@ -65,9 +93,9 @@ const RootNav = createStackNavigator({
     }
 }, {
     initialRouteName: 'Main',
-    navigationOptions: {
+    navigationOptions: ({ navigation }) => ({
         headerTitle: Title
-    }
+    })
 })
 
 interface Props {
@@ -87,6 +115,7 @@ class App extends React.PureComponent<Props> {
 
 
     render() {
+        console.log(this.props.isLoading)
         if(this.props.isLoading) {
             return null
         } else {

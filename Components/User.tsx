@@ -47,7 +47,7 @@ export class UserItem extends React.PureComponent<Props> {
         return (
             <ScrollView>
                 <TouchableHighlight underlayColor="#cccccc"><View style={{ margin: 10, ...style, marginBottom: 0, }}>
-                    <Image source={{ uri: this.props.userInfo.portraitUrl.replace('http', 'https').replace('httpss', 'https') }} style={{ width: 80, height: 80, borderRadius: 40 }} />
+                    <Image source={{ uri: this.props.userInfo.portraitUrl }} style={{ width: 80, height: 80, borderRadius: 40 }} />
                     <Text style={{ fontSize: 30 }}>{this.props.userInfo.name}</Text>
                     <Icon name="angle-right" size={40} color="#aaaaaa" />
                 </View></TouchableHighlight>
@@ -71,7 +71,7 @@ export class UserItem extends React.PureComponent<Props> {
                     <Text style={{ fontSize: 20 }}>我的粉丝</Text>
                     <Icon name="angle-right" size={40} color="#aaaaaa" />
                 </View></TouchableHighlight>
-                <View style={{ ...style, paddingTop: 120, flexDirection: 'column', borderBottomWidth: 0 }}>
+                <View style={{ ...style, flexDirection: 'column', borderBottomWidth: 0, margin: 10 }}>
                     <TouchableHighlight 
                         underlayColor="#dd2300"
                         onPress={this.logOff} 

@@ -7,13 +7,13 @@ import {
     ActivityIndicator,
     RefreshControl
 } from 'react-native'
-import { cFetch } from '../Utility/FetchUtility'
-import { HotTopicInfo } from '../TypeDefinitions/HotTopicInfo'
-import { TopicInfo } from '../TypeDefinitions/TopicInfo'
-import { TopicItem } from './TopicItem'
+import { cFetch } from '../../Utility/FetchUtility'
+import { HotTopicInfo } from '../../TypeDefinitions/HotTopicInfo'
+import { TopicInfo } from '../../TypeDefinitions/TopicInfo'
+import { TopicItem } from '../TopicItem'
 import { connect } from 'react-redux'
-import store from '../Store'
-import { changeTitle } from '../Actions/User';
+import store from '../../Store'
+import { changeTitle } from '../../Actions/User';
 
 interface Props {
     navigation: any
@@ -25,7 +25,7 @@ interface State {
     isLoading: boolean
 }
 
-export class MainPage extends React.PureComponent<Props, State> {
+export class PastTopic extends React.PureComponent<Props, State> {
     state: State = {
         infos: [],
         isLoading: true,
@@ -34,16 +34,8 @@ export class MainPage extends React.PureComponent<Props, State> {
     getHotTopic = async () => {
         this.setState({ isLoading: true })
         try {        
-            let res = await cFetch('/config/index')
-            let data = (await res.json()).hotTopic as HotTopicInfo[]
-            let infos = data.map((item) => ({
-                title: item.title,
-                userName: item.authorName || '匿名',
-                replyCount: item.replyCount,
-                lastPostTime: item.createTime,
-                id: item.id,
-                isAnonymous: item.boardId === 182
-            }) as TopicInfo)
+            let res = await cFetch('/topic/hot-history')
+            let infos = await res.json() as TopicInfo[]
             
             this.setState({
                 infos
@@ -56,13 +48,16 @@ export class MainPage extends React.PureComponent<Props, State> {
     }
 
     componentDidMount() {
-        store.dispatch(changeTitle('热门话题'))
+        store.dispatch(changeTitle('我的主页'))
         this.getHotTopic()
+        if(!store.getState().user.isLogOn) {
+            this.props.navigation.navigate('LogOn')
+        }
     }
 
     componentWillReceiveProps(newProps) {
         if(newProps.navigation.isFocused()) {
-            store.dispatch(changeTitle('热门话题'))
+            store.dispatch(changeTitle('我的主页'))
         }
     }
 

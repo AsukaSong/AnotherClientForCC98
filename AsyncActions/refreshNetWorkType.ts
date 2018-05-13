@@ -6,10 +6,15 @@ import { NetInfo } from 'react-native'
 
 export const refreshNewWorkType: ActionCreator<ThunkAction<Promise<Action>, RootState, void>> = () => async (dispatch, getState) => {
     const isConnect = NetInfo.isConnected.fetch()
-    if(!isConnect) return dispatch(Actions.changeNetworkType('none'))
+    if(!isConnect) {
+        dispatch(Actions.changeNetworkType('none'))
+    }
     const isOnZJUWLAN = await returnIsOnZJUWLAN()
-    if(isOnZJUWLAN) return dispatch(Actions.changeNetworkType('in'))
-    dispatch(Actions.changeNetworkType('out'))
+    if(isOnZJUWLAN) {
+        dispatch(Actions.changeNetworkType('in'))
+    } else {
+        dispatch(Actions.changeNetworkType('out'))
+    }
     return dispatch(Actions.init())
 }
 

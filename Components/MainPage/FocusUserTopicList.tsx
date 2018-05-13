@@ -8,16 +8,18 @@ import {
     RefreshControl,
     FlatList
 } from 'react-native'
-import { cFetch } from '../Utility/FetchUtility'
-import { HotTopicInfo } from '../TypeDefinitions/HotTopicInfo'
-import { TopicInfo } from '../TypeDefinitions/TopicInfo'
-import { TopicItem } from './TopicItem'
+import { withNagivation } from 'react-navigation'
+import { cFetch } from '../../Utility/FetchUtility'
+import { HotTopicInfo } from '../../TypeDefinitions/HotTopicInfo'
+import { TopicInfo } from '../../TypeDefinitions/TopicInfo'
+import { TopicItem } from '../TopicItem'
 import { connect } from 'react-redux'
-import store from '../Store'
-import { changeTitle } from '../Actions/User'
+import store from '../../Store'
+import { changeTitle } from '../../Actions/User'
 
 interface Props {
-    navigation: any
+    navigation?: any
+    url: string
 }
 
 
@@ -25,15 +27,13 @@ interface State {
     infos: TopicInfo[]
     isLoading: boolean
     isLoadFinished: boolean
-    historyTitle: string
 }
 
-export class TopicList extends React.PureComponent<Props, State> {
+class FocusTopicList extends React.PureComponent<Props, State> {
     state: State = {
         infos: [],
         isLoading: false,
-        isLoadFinished: false,
-        historyTitle: store.getState().user.title
+        isLoadFinished: false
     }
 
     getTopic = async () => {
@@ -41,7 +41,7 @@ export class TopicList extends React.PureComponent<Props, State> {
             if(this.state.isLoading) return;
             this.setState({ isLoading: true })
             const id = this.props.navigation.getParam('boardId')
-            let res = await cFetch(`/board/${id}/topic?from=${this.state.infos.length}&size=20`)
+            let res = await cFetch(`${this.props.url}?from=${this.state.infos.length}&size=20`)
             let infos = await res.json() as TopicInfo[]
             const length = infos.length
             this.setState((prevState) => {
@@ -63,16 +63,21 @@ export class TopicList extends React.PureComponent<Props, State> {
     }
 
     componentDidMount() {
-        store.dispatch(changeTitle(this.props.navigation.getParam('title')))
+        store.dispatch(changeTitle('我的主页'))
+        if(!store.getState().user.isLogOn) {
+            this.props.navigation.navigate('LogOn')
+        }
         this.getTopic()
     }
 
-    componentWillUnmount() {
-        store.dispatch(changeTitle(this.state.historyTitle))
+    componentWillReceiveProps(newProps) {
+        if(newProps.navigation.isFocused()) {
+            store.dispatch(changeTitle('我的主页'))
+        }
     }
 
     render() {
-        if(this.state.infos.length === 0) {
+        if(this.state.infos.length === 0 && !this.state.isLoadFinished) {
             return <ActivityIndicator style={{ marginTop: 30 }} size='large' />
         } else {
             return (
@@ -89,3 +94,6 @@ export class TopicList extends React.PureComponent<Props, State> {
         }
     }
 }
+
+export const HFocus = (url: string) => ({ navigation }) => <FocusTopicList url={url} navigation={navigation}  />
+export const FocusUserTopicList = HFocus('/me/followee/topic')
