@@ -41,7 +41,6 @@ export class TopicList extends React.PureComponent<Props, State> {
             if(this.state.isLoading) return;
             this.setState({ isLoading: true })
             const id = this.props.navigation.getParam('boardId')
-            console.log(id)
             let res = await cFetch(`/board/${id}/topic?from=${this.state.infos.length}&size=20`)
             let infos = await res.json() as TopicInfo[]
             const length = infos.length

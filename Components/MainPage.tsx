@@ -33,21 +33,26 @@ export class MainPage extends React.PureComponent<Props, State> {
 
     getHotTopic = async () => {
         this.setState({ isLoading: true })
-        let res = await cFetch('/config/index')
-        let data = (await res.json()).hotTopic as HotTopicInfo[]
-        let infos = data.map((item) => ({
-            title: item.title,
-            userName: item.authorName || '匿名',
-            replyCount: item.replyCount,
-            lastPostTime: item.createTime,
-            id: item.id,
-            isAnonymous: item.boardId === 182
-        }) as TopicInfo)
-        
-        this.setState({
-            isLoading: false,
-            infos
-        })
+        try {        
+            let res = await cFetch('/config/index')
+            let data = (await res.json()).hotTopic as HotTopicInfo[]
+            let infos = data.map((item) => ({
+                title: item.title,
+                userName: item.authorName || '匿名',
+                replyCount: item.replyCount,
+                lastPostTime: item.createTime,
+                id: item.id,
+                isAnonymous: item.boardId === 182
+            }) as TopicInfo)
+            
+            this.setState({
+                infos
+            })
+        } finally {
+            this.setState({
+                isLoading: false
+            })
+        }
     }
 
     componentDidMount() {

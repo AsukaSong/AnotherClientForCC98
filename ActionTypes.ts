@@ -6,3 +6,5 @@ export const USER_INFO_UPDATE = 'USER_INFO_UPDATE'
 export const INIT = 'INIT'
 
 export const CHANGE_TITLE = 'CHANGE_TITLE'
+
+export const CHANGE_NETWORK_TYPE = 'CHANGE_NETWORK_TYPE'

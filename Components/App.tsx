@@ -1,6 +1,6 @@
 import * as React from 'react'
 import LogOn from './LogOn'
-import { Text, View } from 'react-native'
+import { Text, View, NetInfo } from 'react-native'
 import { 
     createBottomTabNavigator,
     createStackNavigator
@@ -17,6 +17,8 @@ import { Title } from './Title'
 import { User } from './User'
 import { Message } from './Message'
 import { TopicList } from './TopicList'
+import { netWorkType } from '../Config/netWorkType'
+import { refreshNewWorkType } from '../AsyncActions/refreshNetWorkType'
 
 const Navigator = createBottomTabNavigator({
     '主页': MainPage,
@@ -71,17 +73,20 @@ const RootNav = createStackNavigator({
 interface Props {
     isLogOn: boolean
     isLoading: boolean
+    netWorkType: netWorkType
     init: () => void
 }
 
 class App extends React.PureComponent<Props> {
     componentDidMount() {
         this.props.init()
+        NetInfo.addEventListener('connectionChange', () => {
+            store.dispatch(refreshNewWorkType())
+        })
     }
 
 
     render() {
-        console.log('app rendered')
         if(this.props.isLoading) {
             return null
         } else {
@@ -93,6 +98,7 @@ class App extends React.PureComponent<Props> {
 const mapState = (state: RootState) => ({
     isLogOn: state.user.isLogOn,
     isLoading: state.user.isLoading,
+    netWorkType: state.user.netWorkType
 })
 
 const mapDispatch = (dispatch) => ({

@@ -1,0 +1,1 @@
+export type netWorkType = 'in' | 'out' | 'none'

@@ -16,7 +16,7 @@ export class PostItem extends React.PureComponent<Props> {
                 <View style={{ flexDirection: 'row', borderBottomColor: '#dddddd', borderBottomWidth: 1, padding: 10 }}>
                     <Image 
                         source={{ uri: this.props.userInfo.portraitUrl.replace('http', 'https').replace('httpss', 'https') }} 
-                        style={{ width: 70, height: 70, borderRadius: 35, backgroundColor: this.props.info.isAnonymous ? '#00a4db' : '' }} 
+                        style={{ width: 70, height: 70, borderRadius: 35, backgroundColor: this.props.info.isAnonymous ? '#00a4db' : undefined }} 
                     />
                     <View style={{ flex: 1, justifyContent: 'space-around', paddingLeft: 20 }}>
                         <Text style={{ color: '#000000', fontSize: 20 }}>{this.props.userInfo.name}</Text>
@@ -37,7 +37,7 @@ export class PostItem extends React.PureComponent<Props> {
                         <Text>{this.props.info.dislikeCount}</Text>
                     </View>
                     <View style={{ flex: 6 }} />
-                    <Button title="回复" onPress={() => null} />>
+                    <Button title="回复" onPress={() => null} />
                 </View>
             </View>
         )
