@@ -8,6 +8,7 @@ import { cFetch } from '../Utility/FetchUtility'
 import { UserInfo } from '../TypeDefinitions/UserInfo'
 import { withNavigation } from 'react-navigation'
 import store from '../Store'
+import { urlConfig } from '../Config/urlConfig'
 
 interface State {
     username: string
@@ -48,7 +49,6 @@ class LogOn extends React.PureComponent<Props, State> {
 
     logOn = async () => {
         try {
-            const isZJUWLAN = store.getState().user.netWorkType === 'in'
             this.setState({ isLoading: true })
             let requestBody = {
                 'client_id': '42cb8d05-eb88-4e97-cfaa-08d5a073b73c',
@@ -59,9 +59,9 @@ class LogOn extends React.PureComponent<Props, State> {
                 'scope': "cc98-api openid offline_access"
             }
 
-            const url = isZJUWLAN ? 'openid.cc98.org' : 'openid0.cc98.inzju.com'
+            const url = urlConfig[store.getState().user.netWorkType].openid
 
-            let res = await fetch(`https://${url}/connect/token`, {
+            let res = await fetch(url, {
                 method: 'post',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'

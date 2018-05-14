@@ -2,10 +2,11 @@ import * as storage from './StorageUtility'
 import urljoin from 'url-join'
 import { UserInfo } from '../TypeDefinitions/UserInfo'
 import store from '../Store'
+import { urlConfig } from '../Config/urlConfig';
 
 export async function cFetch(url: string, init: RequestInit = { headers: {}}) {
-    const isZJUWLAN = store.getState().user.netWorkType === 'in'
-    const baseURL = isZJUWLAN ? 'https://api-v2.cc98.org' : 'https://api0.cc98.inzju.com'
+    const netWorkType = store.getState().user.netWorkType
+    const baseURL = urlConfig[netWorkType].API
     
     let token = await storage.getStorage('accessToken') as string
 
@@ -19,9 +20,9 @@ export async function cFetch(url: string, init: RequestInit = { headers: {}}) {
             'scope': "cc98-api openid offline_access"
         }
 
-        const url = isZJUWLAN ? 'openid.cc98.org' : 'openid0.cc98.inzju.com'
-
-        let res = await fetch(`https://${url}/connect/token`, {
+        const url = urlConfig[netWorkType].openid
+        console.log(url)
+        let res = await fetch(url, {
             method: 'post',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'

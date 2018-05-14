@@ -116,6 +116,7 @@ class App extends React.PureComponent<Props> {
 
     render() {
         console.log(this.props.isLoading)
+        console.log(this.props.netWorkType)
         if(this.props.isLoading) {
             return null
         } else {
