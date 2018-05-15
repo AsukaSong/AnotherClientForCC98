@@ -79,7 +79,7 @@ export class PostList extends React.PureComponent<Props, State> {
                         justifyContent: 'space-between',
                         alignItems: 'center'
                     }}>
-                        <Text style={{ fontSize: 20, maxWidth: 330 }}>{title}</Text>
+                        <Text style={{ fontSize: 20, maxWidth: '90%' }}>{title}</Text>
                         <Icon name='star-o' size={30} />
                     </View>}
                 onEndReached={this.getPosts}

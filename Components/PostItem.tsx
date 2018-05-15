@@ -3,6 +3,7 @@ import { View, Image, Text, Button } from 'react-native'
 import { PostInfo } from '../TypeDefinitions/PostInfo'
 import { UserInfo } from '../TypeDefinitions/UserInfo'
 import Icon from 'react-native-vector-icons/FontAwesome'
+import { UbbContainer } from './UbbContainer'
 
 interface Props {
     info: PostInfo
@@ -16,16 +17,16 @@ export class PostItem extends React.PureComponent<Props> {
                 <View style={{ flexDirection: 'row', borderBottomColor: '#dddddd', borderBottomWidth: 1, padding: 10 }}>
                     <Image 
                         source={{ uri: this.props.userInfo.portraitUrl }} 
-                        style={{ width: 70, height: 70, borderRadius: 35, backgroundColor: this.props.info.isAnonymous ? '#00a4db' : undefined }} 
+                        style={{ width: 50, height: 50, borderRadius: 25, backgroundColor: this.props.info.isAnonymous ? '#00a4db' : undefined }} 
                     />
                     <View style={{ flex: 1, justifyContent: 'space-around', paddingLeft: 20 }}>
-                        <Text style={{ color: '#000000', fontSize: 20 }}>{this.props.userInfo.name}</Text>
+                        <Text style={{ color: '#000000', fontSize: 17 }}>{this.props.userInfo.name}</Text>
                         <Text>{this.props.info.time.replace('T', ' ').slice(0, 19)}</Text>
                     </View>
                     <Text>{`#${this.props.info.floor}`}</Text>
                 </View>
                 <View style={{ padding: 10, borderBottomWidth: 1, borderBottomColor: '#dddddd', paddingBottom: 30, marginTop: 20  }}>
-                    <Text style={{ fontSize: 20 }}>{this.props.info.content}</Text>
+                    <UbbContainer code={this.props.info.content} />
                 </View>
                 <View style={{ flexDirection: 'row', padding: 10, borderBottomWidth: 1, borderBottomColor: '#bbbbbb' }}>
                     <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-around', alignItems: 'center' }}>

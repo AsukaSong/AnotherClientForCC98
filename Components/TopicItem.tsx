@@ -21,7 +21,7 @@ class Item extends React.PureComponent<Props> {
                 style={{ padding: 0 }}
                 onPress={() => this.props.navigation.navigate('Topic', { topicId: this.props.info.id, title: this.props.info.title, isAnonymous: this.props.info.isAnonymous })}
             ><View style={{ padding: 15, borderBottomWidth: 1, borderBottomColor: 'rgb(200,200,200)' }}>
-                <Text style={{ color: '#00a4db', marginBottom: 20, fontSize: 20 }}>{this.props.info.title}</Text>
+                <Text numberOfLines={1} style={{ color: '#00a4db', marginBottom: 10, fontSize: 17 }}>{this.props.info.title}</Text>
                 <View style={{ flex: 1, flexDirection: 'row'}}>
                     <View style={{ flex: 1.5, flexDirection: 'row', alignItems: 'center'}}>
                         <Icon name="user" style={{ marginRight: 5 }} />

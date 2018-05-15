@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Text, TextInput, View, Button, Image, TouchableHighlight } from 'react-native'
+import { Text, TextInput, View, Button, Image, TouchableHighlight, ActivityIndicator } from 'react-native'
 import * as storage from '../Utility/StorageUtility'
 import { RootState } from '../Store'
 import { logOn, updateUserInfo, changeTitle } from '../Actions/User'
@@ -14,6 +14,7 @@ interface State {
     username: string
     password: string
     isLoading: boolean
+    isIniting: boolean
 }
 
 interface Props {
@@ -29,6 +30,7 @@ class LogOn extends React.PureComponent<Props, State> {
         username: '',
         password: '',
         isLoading: false,
+        isIniting: true,
     }
 
     componentWillReceiveProps(newProps) {
@@ -39,12 +41,17 @@ class LogOn extends React.PureComponent<Props, State> {
 
     async componentDidMount() {
         store.dispatch(changeTitle('用户登陆'))
-        let username = await storage.getStorage('username')
-        let password = await storage.getStorage('password')
-        this.setState({
-            username,
-            password
-        })
+        if(await storage.getStorage('userInfo')) {
+            this.props.navigation.replace('Main')
+        } else {
+            let username = await storage.getStorage('username')
+            let password = await storage.getStorage('password')
+            this.setState({
+                username,
+                password,
+                isIniting: false
+            })
+        }
     }
 
     logOn = async () => {
@@ -80,15 +87,17 @@ class LogOn extends React.PureComponent<Props, State> {
 
             storage.setStorage('userInfo', data)
             this.props.logOn(data)
+            this.setState({ isLoading: false })
             this.props.navigation.replace('Main')
         } catch(e) {
+            this.setState({ isLoading: false })
             console.error(e)
         } finally {
-            this.setState({ isLoading: false })
         }
     }
 
     render() {
+        if(this.state.isIniting) return <ActivityIndicator style={{ marginTop: 30 }} size='large' />
         let style = {
             width: 300, 
             height: 30, 

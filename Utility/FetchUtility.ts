@@ -2,7 +2,7 @@ import * as storage from './StorageUtility'
 import urljoin from 'url-join'
 import { UserInfo } from '../TypeDefinitions/UserInfo'
 import store from '../Store'
-import { urlConfig } from '../Config/urlConfig';
+import { urlConfig } from '../Config/urlConfig'
 
 export async function cFetch(url: string, init: RequestInit = { headers: {}}) {
     const netWorkType = store.getState().user.netWorkType

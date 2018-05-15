@@ -23,6 +23,7 @@ import { refreshNewWorkType } from '../AsyncActions/refreshNetWorkType'
 import { PastTopic } from './MainPage/PastTopic'
 import { FocusBoardTopicList } from './MainPage/FocusBoardTopicList'
 import { FocusUserTopicList } from './MainPage/FocusUserTopicList'
+import NavigationService from '../NavigateService'
 
 const HomeNav = createTabNavigator({
     '热门话题': HotTopic,
@@ -61,7 +62,7 @@ const AppNavigator = createBottomTabNavigator({
     navigationOptions: ({ navigation }) => ({
         tabBarIcon: ({ focused }) => {
             let iconName = getIconNameByRouteName(navigation.state.routeName)
-            return <Icon name={iconName} style={{ color: focused ? '#00a4db' : '' }} size={25} />
+            return <Icon name={iconName} style={{ color: focused ? '#00a4db' : undefined }} size={25} />
         },
         tabBarOptions: {
             showLabel: false
@@ -92,7 +93,7 @@ const RootNav = createStackNavigator({
         screen: TopicList
     }
 }, {
-    initialRouteName: 'Main',
+    initialRouteName: 'LogOn',
     navigationOptions: ({ navigation }) => ({
         headerTitle: Title
     })
@@ -120,7 +121,7 @@ class App extends React.PureComponent<Props> {
         if(this.props.isLoading) {
             return null
         } else {
-            return <RootNav />
+            return <RootNav ref={navigatorRef => NavigationService.setTopLevelNavigator(navigatorRef)} />
         }
     }
 }
