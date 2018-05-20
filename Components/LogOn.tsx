@@ -6,7 +6,6 @@ import { logOn, updateUserInfo, changeTitle } from '../Actions/User'
 import { connect } from 'react-redux'
 import { cFetch } from '../Utility/FetchUtility'
 import { UserInfo } from '../TypeDefinitions/UserInfo'
-import { withNavigation } from 'react-navigation'
 import store from '../Store'
 import { urlConfig } from '../Config/urlConfig'
 
@@ -147,4 +146,4 @@ const mapDispatch = (dispatch) => ({
     }
 })
 
-export default connect(mapState, mapDispatch)(withNavigation(LogOn))
+export default connect(mapState, mapDispatch)(LogOn)

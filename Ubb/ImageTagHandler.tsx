@@ -5,12 +5,13 @@
 import * as React from 'react'
 import * as Ubb from './Core'
 import CustomImage from '../Components/Image'
+import { Text } from 'react-native'
 
 export class ImageTagHandler extends Ubb.TextTagHandler {
     get supportedTagNames(): string { return 'img' }
 
     execCore(content: string, tagData: Ubb.UbbTagData, context: Ubb.UbbCodeContext): React.ReactNode {
-        if(context.data.quoteDepth !== 0) return null
+        if(context.data.quoteDepth !== 0) return <Text>图片</Text>
         return <CustomImage source={{ uri: content }} />
     }
 }

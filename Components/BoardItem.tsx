@@ -6,10 +6,11 @@ import { withNavigation } from 'react-navigation'
 
 interface Props {
     info: BoardListInfo
-    navigation: any
+    navigation?: any
 }
 
-class Board extends React.PureComponent<Props> {
+@withNavigation
+export class BoardItem extends React.PureComponent<Props> {
     render() {
         return (
             <View style={{ paddingRight: 10, paddingLeft: 10 }}>
@@ -33,5 +34,3 @@ class Board extends React.PureComponent<Props> {
         )
     }
 }
-
-export const BoardItem = withNavigation(Board)

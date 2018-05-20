@@ -10,10 +10,11 @@ import { withNavigation } from 'react-navigation'
 
 interface Props {
     info: TopicInfo
-    navigation: any
+    navigation?: any
 }
 
-class Item extends React.PureComponent<Props> {
+@withNavigation
+export class TopicItem extends React.PureComponent<Props> {
     render() {
         return (
             <TouchableHighlight 
@@ -40,5 +41,3 @@ class Item extends React.PureComponent<Props> {
         )
     }
 }
-
-export const TopicItem = withNavigation(Item)

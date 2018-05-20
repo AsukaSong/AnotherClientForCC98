@@ -21,7 +21,6 @@ export async function cFetch(url: string, init: RequestInit = { headers: {}}) {
         }
 
         const url = urlConfig[netWorkType].openid
-        console.log(url)
         let res = await fetch(url, {
             method: 'post',
             headers: {
@@ -31,10 +30,13 @@ export async function cFetch(url: string, init: RequestInit = { headers: {}}) {
         })
 
         let data = await res.json()
+        console.log(data)
         token = data.access_token
         storage.setStorage('accessToken', data.token_type + ' ' + token, data.expires_in * 1000)
 
     }
+
+    console.log(url)
     
     return fetch(urljoin(baseURL, url), {...init, ...{
         headers: {
